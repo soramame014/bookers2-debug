@@ -1,11 +1,10 @@
 class CommentsController < ApplicationController
   def create
-    @comment = current_user.comments.new(comment_params)
-    if @comment.save
-      redirect_back(fallback_location: root_path)  #コメント送信後は、一つ前のページへリダイレクトさせる。
-    else
-      redirect_back(fallback_location: root_path)  #同上
-    end
+    book = Book.find(params[:book_id])
+    comment = current_user.comments.new(comment_params)
+    comment.book_id = book.id
+    comment.save
+    redirect_to book_path(book.id)
   end
 
   private
